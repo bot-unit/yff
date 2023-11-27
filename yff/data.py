@@ -6,12 +6,12 @@
     
 """
 
-from yff.fetcher import YahooFinanceFetcher
+from yff.fetcher import YahooFinanceAsyncFetcher
 
 
 class YahooFinanceData:
     def __init__(self):
-        self._yf = YahooFinanceFetcher()
+        self._yf = YahooFinanceAsyncFetcher()
 
     async def __aenter__(self):
         return self

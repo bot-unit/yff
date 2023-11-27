@@ -1,6 +1,6 @@
 aiohttp
+requests
 numpy
 pandas
 pytz
 beautifulsoup4
-

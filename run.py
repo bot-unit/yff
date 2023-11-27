@@ -7,12 +7,12 @@
 """
 
 import asyncio
-from yff import YahooFinanceFetcher, YahooFinanceParser
+from yff import YahooFinanceAsyncFetcher, YahooFinanceSyncFetcher, YahooFinanceParser
 from yff.constants import VALID_MODULES
 
 
 async def main():
-    yahoo = YahooFinanceFetcher.instance()
+    yahoo = YahooFinanceAsyncFetcher.instance()
     parser = YahooFinanceParser()
     async with yahoo:
         await yahoo.load_yahoo_cookies('yahoo.cookies')
@@ -59,10 +59,17 @@ async def main():
 
 
 if __name__ == '__main__':
-    YahooFinanceFetcher()
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(main())
-    loop.close()
+    # async api
+    # YahooFinanceAsyncFetcher()
+    # loop = asyncio.get_event_loop()
+    # loop.run_until_complete(main())
+    # loop.close()
+    # sync api
+    # fetcher = YahooFinanceSyncFetcher()
+    # response = fetcher.get_spark(['AAPL', 'MSFT'])
+    # data = YahooFinanceParser().parse_spark(response)
+    # print(data)
+    # response = fetcher.get_quote(['AAPL', 'MSFT'])
+    # data = YahooFinanceParser().parse_quote(response)
+    # print(data)
     pass
-
-
