@@ -242,9 +242,11 @@ class YahooFinanceFetcher(metaclass=SingletonMeta):
         url = self._build_url(ENDPOINTS['download']) + symbol
         return await self._get_text(url, params=params)
 
-    async def get_options(self, symbol: str):
+    async def get_options(self, symbol: str, expiration: int = 0):
         params = dict()
         params['symbol'] = symbol
+        if expiration > 0:
+            params['date'] = expiration
         params['formatted'] = 'false'
         url = self._build_url(ENDPOINTS['options'])
         return await self._get_json(url, params=params)

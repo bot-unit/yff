@@ -7,6 +7,7 @@
 """
 
 import pandas as pd
+from collections import namedtuple
 import warnings
 warnings.simplefilter(action='ignore', category=UserWarning)
 
@@ -33,9 +34,6 @@ class YahooFinanceParser:
         top_level = data.get('spark')
         if top_level is None:
             raise ValueError('spark not found in data')
-        error = top_level.get('error')
-        if error is not None:
-            raise ValueError(error)
         charts = []
         metas = {}
         for result in top_level.get('result'):
@@ -84,8 +82,29 @@ class YahooFinanceParser:
         pass
 
     @staticmethod
-    def parse_options(data):
-        pass
+    def parse_options(data) -> tuple[pd.DataFrame, list, dict]:
+        top_level = data.get('optionChain')
+        if top_level is None:
+            raise ValueError('optionChain not found in data')
+        expiration_dates = []
+        quote = {}
+        calls = pd.DataFrame()
+        puts = pd.DataFrame()
+        try:
+            quote = top_level['result'][0]['quote']
+            expiration_dates = top_level['result'][0]['expirationDates']
+            calls = pd.DataFrame(top_level['result'][0]['options'][0]['calls'])
+            calls.set_index('strike', inplace=True, drop=False)
+            puts = pd.DataFrame(top_level['result'][0]['options'][0]['puts'])
+            puts.set_index('strike', inplace=True, drop=False)
+        except KeyError:
+            pass
+        d = dict()
+        d['calls'] = calls
+        d['puts'] = puts
+        options = pd.concat(d, axis=1)
+        # add to pd as attributes ?
+        return options, expiration_dates, quote
 
     @staticmethod
     def _parse_search_quotes(data) -> dict:
