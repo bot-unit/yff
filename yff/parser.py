@@ -7,7 +7,7 @@
 """
 
 import pandas as pd
-from collections import namedtuple
+from io import StringIO
 import warnings
 warnings.simplefilter(action='ignore', category=UserWarning)
 
@@ -122,7 +122,13 @@ class YahooFinanceParser:
 
     @staticmethod
     def parse_downloads(data):
-        pass
+        try:
+            df = pd.read_csv(StringIO(data))
+            df.set_index('Date', inplace=True)
+            df.index = pd.to_datetime(df.index, format='%Y-%m-%d')
+            return df
+        except pd.errors.EmptyDataError:
+            return pd.DataFrame()
 
     @staticmethod
     def parse_options(data) -> tuple[pd.DataFrame, list, dict]:

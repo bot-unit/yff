@@ -40,15 +40,17 @@ async def main():
         # print(expirations)
         # print(quote)
         # date=1701734400
-        period1 = 1391986800
-        period2 = 1701101212
-        response = await yahoo.get_chart('AAPL', start=period1, end=period2, interval='1d')
-        df = parser.parse_chart(response)
-        print(df.meta)
-        print(df.head())
-        print(df.dividends)
-        print(df.splits)
-        # print(await yahoo.download_chart('DBK.DE'))
+        # period1 = 1391986800
+        # period2 = 1701101212
+        # response = await yahoo.get_chart('AAPL', start=period1, end=period2, interval='1d')
+        # df = parser.parse_chart(response)
+        # print(df.meta)
+        # print(df.head())
+        # print(df.dividends)
+        # print(df.splits)
+        response = await yahoo.download_chart('DBK.DE')
+        df = parser.parse_downloads(response)
+        print(df)
         # print(await yahoo.get_quote('DBK.DE'))
         # print("summary")
         #for m in VALID_MODULES:
