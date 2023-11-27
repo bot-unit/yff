@@ -19,3 +19,6 @@ intended only for research and educational purposes. You should refer to Yahoo!'
 detailes on your rights to use the actual data downloaded.**
 
 ---
+
+plans: create many test requests and automatically fill documentation
+for all data that available from yahoo finance

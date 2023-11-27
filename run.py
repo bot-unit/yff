@@ -14,8 +14,6 @@ from yff.constants import VALID_MODULES
 async def main():
     yahoo = YahooFinanceFetcher.instance()
     parser = YahooFinanceParser()
-    period1 = 1700077200
-    period2 = 1701009736
     async with yahoo:
         await yahoo.load_yahoo_cookies('yahoo.cookies')
         # await yahoo.warm_up()
@@ -48,13 +46,15 @@ async def main():
         # print(df.head())
         # print(df.dividends)
         # print(df.splits)
-        response = await yahoo.download_chart('DBK.DE')
-        df = parser.parse_downloads(response)
-        print(df)
-        # print(await yahoo.get_quote('DBK.DE'))
+        # response = await yahoo.download_chart('DBK.DE')
+        # df = parser.parse_downloads(response)
+        # print(df)
+        # response = await yahoo.get_quote(['DBK.DE', 'META', 'AAPL'])
+        # print(parser.parse_quote(response))
         # print("summary")
-        #for m in VALID_MODULES:
-            #print(m, await yahoo.get_quote_summary('AAPL', modules=[m]))
+        # response = await yahoo.get_quote_summary('AAPL', modules=VALID_MODULES)
+        # parsed = parser.parse_quote_summary(response)
+        # for key, value in parsed.items(): print(key, value, sep="\n")
         await yahoo.save_yahoo_cookies('yahoo.cookies')
 
 
