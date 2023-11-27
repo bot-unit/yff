@@ -1,0 +1,6 @@
+aiohttp
+numpy
+pandas
+pytz
+beautifulsoup4
+
