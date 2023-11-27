@@ -15,7 +15,7 @@ warnings.simplefilter(action='ignore', category=UserWarning)
 class YahooFinanceParser:
 
     @staticmethod
-    def _parse_spark_meta(data) -> dict:
+    def _parse_meta(data) -> dict:
         # not all data needed
         parsed = dict()
         parsed['symbol'] = data['symbol']
@@ -38,12 +38,11 @@ class YahooFinanceParser:
         metas = {}
         for result in top_level.get('result'):
             try:
-                meta = YahooFinanceParser._parse_spark_meta(result['response'][0]['meta'])
+                meta = YahooFinanceParser._parse_meta(result['response'][0]['meta'])
                 timestamps = result['response'][0]['timestamp']
-                indicators = result['response'][0]['indicators']['quote'][0]
-                df_chart = pd.DataFrame(indicators, index=timestamps)
+                indicators = result['response'][0]['indicators']['quote'][0]['close']
+                df_chart = pd.DataFrame({meta['symbol']: indicators}, index=timestamps)
                 df_chart.index = pd.to_datetime(df_chart.index, unit='s')
-                df_chart.rename(columns={df_chart.columns[0]: meta['symbol']}, inplace=True)
                 charts.append(df_chart)
                 metas[meta['symbol']] = meta
             except KeyError:
@@ -74,8 +73,52 @@ class YahooFinanceParser:
         pass
 
     @staticmethod
+    def _parse_dividends(data: dict) -> pd.DataFrame:
+        dividends = pd.DataFrame(data.values())
+        dividends.set_index('date', inplace=True)
+        dividends.index = pd.to_datetime(dividends.index, unit='s')
+        return dividends
+
+    @staticmethod
+    def _parse_splits(data: dict) -> pd.DataFrame:
+        splits = pd.DataFrame(data.values())
+        splits.set_index('date', inplace=True)
+        splits.index = pd.to_datetime(splits.index, unit='s')
+        return splits
+
+    @staticmethod
     def parse_chart(data):
-        pass
+        top_level = data.get('chart')
+        if top_level is None:
+            raise ValueError('chart not found in data')
+        try:
+            meta = YahooFinanceParser._parse_meta(top_level['result'][0]['meta'])
+            timestamps = top_level['result'][0]['timestamp']
+            indicators = top_level['result'][0]['indicators']['quote'][0]
+            opens = indicators['open']
+            closes = indicators['close']
+            highs = indicators['high']
+            lows = indicators['low']
+            volumes = indicators['volume']
+            adj = None
+            if 'adjclose' in top_level['result'][0]['indicators']:
+                adj = top_level['result'][0]['indicators']['adjclose'][0]['adjclose']
+            if adj is not None:
+                df = pd.DataFrame({'Open': opens, 'Close': closes, 'High': highs, 'Low': lows, 'Volume': volumes, 'Adj.Close': adj}, index=timestamps)
+            else:
+                df = pd.DataFrame({'Open': opens, 'Close': closes, 'High': highs, 'Low': lows, 'Volume': volumes}, index=timestamps)
+            df.index = pd.to_datetime(df.index, unit='s')
+            df.meta = meta
+            if 'events' in top_level['result'][0]:
+                events = top_level['result'][0]['events']
+                if 'dividends' in events:
+                    df.dividends = YahooFinanceParser._parse_dividends(events['dividends'])
+                if 'splits' in events:
+                    df.splits = YahooFinanceParser._parse_splits(events['splits'])
+            return df
+        except KeyError:
+            pass
+        return pd.DataFrame()
 
     @staticmethod
     def parse_downloads(data):
