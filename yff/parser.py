@@ -12,6 +12,7 @@ import warnings
 warnings.simplefilter(action='ignore', category=UserWarning)
 
 
+# todo: add parse error field
 class YahooFinanceParser:
 
     @staticmethod
@@ -93,6 +94,12 @@ class YahooFinanceParser:
     def _parse_asset_profile(data):
         officers = YahooFinanceParser._parse_raws(data.get('companyOfficers', []))
         data['companyOfficers'] = officers
+        return data
+
+    @staticmethod
+    def _parse_fund_profile(data):
+        del data['maxAge']
+        del data['styleBoxUrl']
         return data
 
     @staticmethod
@@ -230,11 +237,25 @@ class YahooFinanceParser:
         df.index = pd.to_datetime(df.index, unit='s')
         return df
 
+    @staticmethod
+    def _parse_futures_chain(data):
+        futures = data.get('futures', [])
+        try:
+            details = data['futuresChainDetails']
+            df = pd.DataFrame(details.values())
+            df.set_index('symbol', inplace=True)
+            df.index.name = 'contractSymbol'
+            df['expireDate'] = pd.to_datetime(df['expireDate'], unit='s')
+        except KeyError:
+            df = pd.DataFrame()
+        df.futures = futures
+        return df
+
     _quote_summary_parsers = {
         "summaryProfile": lambda data: data,  # not need to parse
         "summaryDetail": lambda data: data,  # not need to parse
         "assetProfile": lambda data: YahooFinanceParser._parse_asset_profile(data),
-        "fundProfile": lambda data: data,  # no data, not need to parse
+        "fundProfile": lambda data: YahooFinanceParser._parse_fund_profile(data),
         "price": lambda data: data,  # not need to parse
         "quoteType": lambda data: data,  # not need to parse
         "esgScores": lambda data: data,  # not need to parse
@@ -263,7 +284,7 @@ class YahooFinanceParser:
         "indexTrend": lambda data: data,  # not need to parse
         "sectorTrend": lambda data: data,  # not need to parse
         "recommendationTrend": lambda data: YahooFinanceParser._parse_recommendation_trend(data),
-        "futuresChain": lambda data: data,  # need more info for parsing
+        "futuresChain": lambda data: YahooFinanceParser._parse_futures_chain(data),
     }
 
     @staticmethod

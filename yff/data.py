@@ -125,6 +125,18 @@ class YahooFinanceData:
                     raise e
                 continue
 
+    async def get_price_history(self,
+                                symbol: str,
+                                start: int = 0,
+                                end: int = 0,
+                                interval: str = '1d',
+                                prepost: bool = False,
+                                adj_close: bool = True,
+                                events: list = None,
+                                max_attempts: int = 3
+                                ):
+        return await self.get_chart(symbol, start, end, interval, prepost, adj_close, events, max_attempts)
+
     async def _download_chart(self, symbol: str, period1: int, period2: int, interval: str,  adj_close: bool):
         if self._yf is None:
             async with YahooFinanceAsyncFetcher() as yf:
@@ -213,6 +225,7 @@ class YahooFinanceData:
                     raise e
                 continue
 
+    # todo: add exception handling if requested module is not exist in response
     async def get_quote_info(self, symbol: str, max_attempts: int = 3):
         response = await self.get_quote_summary(symbol, ["summaryProfile", "summaryDetail", "quoteType"], max_attempts=max_attempts)
         answer = {}
@@ -226,14 +239,6 @@ class YahooFinanceData:
         answer = {}
         answer.update(response['price'])
         answer.update(response['summaryDetail'])
-        return answer
-
-    async def get_futures_info(self, symbol: str, max_attempts: int = 3):
-        response = await self.get_quote_summary(symbol, ["price", "summaryDetail", "futuresChain"], max_attempts=max_attempts)
-        answer = {}
-        answer.update(response['price'])
-        answer.update(response['summaryDetail'])
-        answer.update(response['futuresChain'])
         return answer
 
     async def get_summary_profile(self, symbol: str, max_attempts: int = 3):
@@ -359,3 +364,12 @@ class YahooFinanceData:
     async def get_recommendation_trend(self, symbol: str, max_attempts: int = 3):
         response = await self.get_quote_summary(symbol, ["recommendationTrend"], max_attempts=max_attempts)
         return response['recommendationTrend']
+
+    async def get_futures_chain(self, symbol: str, max_attempts: int = 3):
+        response = await self.get_quote_summary(symbol, ["futuresChain"], max_attempts=max_attempts)
+        futures = response['futuresChain']
+        return getattr(futures, 'futures', [])
+
+    async def get_futures_chain_details(self, symbol: str, max_attempts: int = 3):
+        response = await self.get_quote_summary(symbol, ["futuresChain"], max_attempts=max_attempts)
+        return response['futuresChain']

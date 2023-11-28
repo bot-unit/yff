@@ -60,8 +60,24 @@ async def main():
 
 async def main2():
     async with YahooFinanceData() as yf:
-        response = await yf.get_spark(['AAPL', 'MSFT'])
+        # response = await yf.get_spark(['AAPL', 'MSFT'])
+        # print(response)
+        # fund profile
+        # response = await yf.get_fund_profile('VTI')
+        # print(response)
+        # response = await yf.get_fund_profile('VTSAX')
+        # print(response)
+        # response = await yf.get_futures_chain('ESH24.CME')
+        # print(response)
+        # response = await yf.get_futures_chain_details('ESH24.CME')
+        # print(response)
+        response = await yf.get_options_expirations('QQQ')
         print(response)
+        response = await yf.get_options_chain('QQQ', expiration=1701216000)
+        print(response)
+        response = await yf.get_options_info('QQQ231129C00330000')
+        print(response)
+        pass
 
 
 if __name__ == '__main__':
