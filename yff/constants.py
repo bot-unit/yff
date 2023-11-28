@@ -62,6 +62,7 @@ VALID_MODULES = (
 DEFAULT_MODULES = (
     "summaryProfile",
     "summaryDetail",
+    "quoteType",
 )
 NON_STOCK_MODULES = (
     "price",

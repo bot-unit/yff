@@ -160,7 +160,7 @@ class YahooFinanceAsyncFetcher(metaclass=SingletonMeta):
             await self._update_crumb()
         return self._crumb
 
-    async def warm_up(self):
+    async def warmup(self):
         await self._get_yahoo_cookies()
         await self._get_crumb()
 
@@ -189,7 +189,7 @@ class YahooFinanceAsyncFetcher(metaclass=SingletonMeta):
     async def get_quote_summary(self, symbol: str, modules: list = None):  # requires crumb
         params = dict()
         params['symbol'] = symbol
-        if modules is not None:
+        if modules is not None and len(modules):
             params['modules'] = ','.join(modules)
         else:
             params['modules'] = ','.join(VALID_MODULES)
@@ -234,7 +234,7 @@ class YahooFinanceAsyncFetcher(metaclass=SingletonMeta):
         if end == 0:
             end = int(time.time())
         if start >= end or start == 0:
-            params['period1'] = end - 86400 * 30
+            params['period1'] = end - 86400 * 5
             params['period2'] = end
         else:
             params['period1'] = start

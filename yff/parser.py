@@ -263,6 +263,7 @@ class YahooFinanceParser:
         "indexTrend": lambda data: data,  # not need to parse
         "sectorTrend": lambda data: data,  # not need to parse
         "recommendationTrend": lambda data: YahooFinanceParser._parse_recommendation_trend(data),
+        "futuresChain": lambda data: data,  # need more info for parsing
     }
 
     @staticmethod
