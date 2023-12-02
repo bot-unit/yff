@@ -6,6 +6,6 @@
     
 """
 
-from .fetcher import YahooFinanceAsyncFetcher, YahooFinanceSyncFetcher
 from .data import YahooFinanceData
+from .fetcher import YahooFinanceAsyncFetcher, YahooFinanceSyncFetcher
 from .parser import YahooFinanceParser

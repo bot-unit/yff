@@ -2,7 +2,7 @@
 
 inspired by [yfinance](https://github.com/ranaroussi/yfinance/) by **Ran Aroussi**
 
-Just some classes to fetch data from Yahoo Finance asynchronously, 
+Just some classes to fetch data from Yahoo Finance asynchronously,
 that I am using for educational purposes in my projects.
 
 ---

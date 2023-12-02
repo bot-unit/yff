@@ -7,8 +7,8 @@
 """
 
 import asyncio
-from yff import YahooFinanceAsyncFetcher, YahooFinanceSyncFetcher, YahooFinanceParser, YahooFinanceData
-from yff.constants import VALID_MODULES
+
+from yff import YahooFinanceAsyncFetcher, YahooFinanceParser, YahooFinanceData
 
 
 async def main():
@@ -71,11 +71,13 @@ async def main2():
         # print(response)
         # response = await yf.get_futures_chain_details('ESH24.CME')
         # print(response)
-        response = await yf.get_options_expirations('QQQ')
-        print(response)
-        response = await yf.get_options_chain('QQQ', expiration=1701216000)
-        print(response)
-        response = await yf.get_options_info('QQQ231129C00330000')
+        # response = await yf.get_options_expirations('QQQ')
+        # print(response)
+        # response = await yf.get_options_chain('QQQ', expiration=1701216000)
+        # print(response)
+        # response = await yf.get_options_info('QQQ231129C00330000')
+        # print(response)
+        response = await yf.get_recommendation_trend('AAPL')
         print(response)
         pass
 

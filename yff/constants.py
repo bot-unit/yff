@@ -7,24 +7,49 @@
 """
 
 ENDPOINTS = {
-    'crumb': '/v1/test/getcrumb',  # crumb for requests
-    'spark': '/v7/finance/spark',  # quick info with close price data
-    'quote_type': '/v1/finance/quoteType/',  # type of quote
-    'quote': '/v7/finance/quote',  # quote current data
-    'quote_summary': '/v10/finance/quoteSummary/',  # expanded quote data, depends on modules in query
-    'chart': '/v8/finance/chart/',  # price data
-    'download': '/v7/finance/download/',  # download price data
-    'options': '/v7/finance/options/',  # options data
-    'search': '/v1/finance/search',  # search quotes by text
-    'recommendations': '/v6/finance/recommendationsbysymbol/',  # recommendations
+    "crumb": "/v1/test/getcrumb",  # crumb for requests
+    "spark": "/v7/finance/spark",  # quick info with close price data
+    "quote_type": "/v1/finance/quoteType/",  # type of quote
+    "quote": "/v7/finance/quote",  # quote current data
+    "quote_summary": "/v10/finance/quoteSummary/",  # expanded quote data, depends on modules in query
+    "chart": "/v8/finance/chart/",  # price data
+    "download": "/v7/finance/download/",  # download price data
+    "options": "/v7/finance/options/",  # options data
+    "search": "/v1/finance/search",  # search quotes by text
+    "recommendations": "/v6/finance/recommendationsbysymbol/",  # recommendations
 }
 
 VALID_RANGES = ("1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max")
-VALID_INTERVALS = ("1m", "2m", "5m", "15m", "30m", "60m", "90m", "1h", "1d", "5d", "1wk", "1mo", "3mo")
+VALID_INTERVALS = (
+    "1m",
+    "2m",
+    "5m",
+    "15m",
+    "30m",
+    "60m",
+    "90m",
+    "1h",
+    "1d",
+    "5d",
+    "1wk",
+    "1mo",
+    "3mo",
+)
 VALID_PERIODS = ("1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max")
 VALID_EVENTS = ("div", "split", "earn", "capitalGain")  # | sepperated
 VALID_FILTERS = ("history", "dividend", "split")
-QUOTE_TYPES = ("EQUITY", "ETF", "MUTUALFUND", "MONEYMARKET", "OPTION", "INDEX", "CRYPTOCURRENCY", "CURRENCY", "WARRANT", "BOND")
+QUOTE_TYPES = (
+    "EQUITY",
+    "ETF",
+    "MUTUALFUND",
+    "MONEYMARKET",
+    "OPTION",
+    "INDEX",
+    "CRYPTOCURRENCY",
+    "CURRENCY",
+    "WARRANT",
+    "BOND",
+)
 VALID_MODULES = (
     "summaryProfile",  # contains general information about the company
     "summaryDetail",  # prices + volume + market cap + etc
